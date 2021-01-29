@@ -65,3 +65,17 @@ void printPrimes()
 	}
 	cout << endl;
 }
+
+int countPowMod(int a, int power, int mod)
+{
+   int result = 1;
+   int temp = a % mod;
+   while (power >= 1) {
+      if (power % 2 != 0) {
+         result = (result * temp) % mod;   
+      }
+      temp = (temp * temp) % mod;
+      power /= 2;   
+   }
+   return result;
+}
