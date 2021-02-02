@@ -1,12 +1,12 @@
 #include<iostream>
 using namespace std;
 
-const int N = 101;
-int a[N], top = 0;
-void push(int);
-void pop();
-int getTop();
-void clear();
+const int N = 101;	//数组栈的最大长度
+int a[N], top = 0;	//定义数组栈和栈顶元素
+void push(int);	//入栈push
+void pop();	//出栈pop
+int getTop();	//获取栈顶元素
+void clear();	//清空栈
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
 		num /=2;
 		cnt++;
 	}
-	for (int i=1; i <= cnt; i++)
+	for (int i=1; i <= cnt; i++)	//利用栈的LIFO（last in first out）性质倒序输出
 	{
 		cout << getTop();
 		pop();
