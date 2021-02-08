@@ -135,21 +135,36 @@ int main()
         switch (p[i].suit)
         {
         case 1:
-            cout << "梅花";
+            cout << "\u2665";
             break;
         case 2:
-            cout << "方片";
+            cout << "\u2666";
             break;
         case 3:
-            cout << "红桃";
+            cout << "\u2660";
             break;
         case 4:
-            cout << "黑桃";
+            cout << "\u2663";
             break;
         }
-        cout << p[i].points << " ";
+        switch (p[i].points)
+        {
+        	case 11:
+        	cout << "J";
+        	break;
+        	case 12:
+        	cout << "Q";
+        	break;
+        	case 13:
+        	cout << "K";
+        	break;
+        	default:
+        	cout << p[i].points;
+        	break;
+        }
+        cout << " ";
     }
-    cout << "\n请推测第五张牌（梅花=1，方片=2，红桃=3，黑桃=4；A=1，J=11，Q=12，K=13）：" << endl;
+    cout << "\n请推测第五张牌（\u2665=1，\u2666=2，\u2660=3，\u2663=4；A=1，J=11，Q=12，K=13）：" << endl;
     int m, n;
     cin >> m >> n;
     if (m == p[4].suit && n == p[4].points)
