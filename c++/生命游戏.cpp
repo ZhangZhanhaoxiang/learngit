@@ -12,7 +12,7 @@ using std::cin;
 using std::endl;
 
 // 定义地图行数和列数
-const int map_x = 80, map_y = 70;
+const int map_x = 80, map_y = 60;
 int map[map_x][map_y] = { 0 };
 
 // 打印地图
@@ -23,7 +23,7 @@ void print_map()
 		for (int j = 0; j < map_y; ++j)
 			map[i][j] == 1 ? cout << "\u25a0" : cout << "\u25a1";
 		cout << endl;
-	cout << endl;
+	}
 }
 
 // 统计当前格子周围8格子的生命总数
@@ -79,6 +79,18 @@ void update()
 	// 规则4：否则保持不变
 }
 
+// 自定义sleep延时函数
+void my_m_sleep(int time)
+{
+#if defined(__linux__)
+	// Linux系统
+	usleep(time * 1000);
+#elif defined(_WIN32)
+	// Windows系统
+	Sleep(time);
+#endif
+}
+
 int main()
 {
 	cout << "请输入有生命的格子的个数及其坐标：" << endl;
@@ -90,11 +102,11 @@ int main()
 		map[x][y] = 1;
 	}
 	print_map();
-	for (int i = 1; i <= 100; ++i)
+	for (int i = 1; i <= 200; ++i)
 	{
 		update();
 		print_map();
-		usleep(1000 * 50);		// 延时(1000*n)微秒
+		my_m_sleep(20);
 		system("clear");		// 清空控制台
 	}
 	cout << "Run Successfully!" << endl;
