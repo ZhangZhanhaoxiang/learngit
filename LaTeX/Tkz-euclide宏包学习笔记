@@ -1,0 +1,223 @@
+\documentclass[UTF8]{ctexart}
+\title{Tkz-euclide宏包学习笔记}
+\author{M81}
+\date{\today}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{listings}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{宏包导入}
+\begin{lstlisting}
+\usepackage{tkz-euclide}
+\begin{tikzpicture}
+\end{tikzpicture}
+\end{lstlisting}
+\section{基本作图命令}
+\subsection{点}
+\subsubsection{定义}
+\begin{lstlisting}
+\tkzDefPoint(x,y){name}
+\tkzDefPoint(a:d){name}
+\tkzDefPoints{x1/y1/name1,x2/y2/name2,...}
+\end{lstlisting}
+\subsubsection{绘制}
+\begin{lstlisting}
+\tkzDrawPoint[option](P1)
+\tkzDrawPoints[option](P1,P2,...)
+\end{lstlisting}
+P1、P2等点需在之前已经定义。
+\subsubsection{标记}
+\begin{lstlisting}
+\tkzLabelPoint[option](point){$name$}
+\end{lstlisting}
+point：定义好的点  name：想要起的名字\\
+option：方向：\\
+\begin{tabular}{|c|c|c|}
+\hline
+above left & above & above right\\
+\hline
+left & point & right\\
+\hline
+below left & below & below right\\
+\hline
+\end{tabular}
+\begin{lstlisting}
+\tkzLabelPoints[option](P1,P2,...)
+\end{lstlisting}
+多个点同时标记，直接根据点的名字自动标记，默认标在右下角。
+\subsection{直线}
+\begin{lstlisting}
+\tkzDrawLine[option](P1,P2)
+\tkzDrawLines[option](P1,P2 P3,P4 P5,P6 ...)
+\end{lstlisting}
+option:
+\begin{itemize}
+    \item dashed - 虚线
+\end{itemize}
+\subsection{线段}
+\begin{lstlisting}
+\tkzDrawSegment[option](P1,P2)
+\tkzDrawSegments[option](P1,P2 P3,P4 P5,P6 ...)
+\end{lstlisting}
+\subsection{圆}
+\begin{lstlisting}
+\tkzDrawCircle[option](A,B)
+\end{lstlisting}
+以A为圆心，B为圆上一点作圆。
+\begin{lstlisting}
+\tkzDrawCircle[option](A,B,C)
+\end{lstlisting}
+作关于A,B,C三点的圆。\\
+option：
+\begin{itemize}
+    \item circum - 作过A,B,C三点的圆
+    \item in - 作$\triangle ABC$的内切圆
+\end{itemize}
+\begin{lstlisting}
+\tkzDrawCircle[option,R](A,r)
+\end{lstlisting}
+以A为圆心，r为半径作圆。
+\begin{lstlisting}
+\tkzDrawCircle[option,with nodes](A,B,C)
+\end{lstlisting}
+以A为圆心，BC为半径作圆。
+\section{复杂作图命令}
+\subsection{获取生成的点和线段的长度}
+\begin{lstlisting}
+\tkzGetPoint{P}
+\tkzGetPoints{A}{B}
+\tkzGetFirstPoint{A}
+\tkzGetSecondPoint{B}
+\tkzGetLength{a}
+\end{lstlisting}
+获取生成的点，并将其存储为点P；\\
+获取同时生成的两个点；\\
+获取同时生成的两个点中的第一个；\\
+获取同时生成的两个点中的第二个；\\
+获取返回的长度，并以pt为单位存储在变量a中，使用时可以用
+\begin{lstlisting}
+\a pt
+\end{lstlisting}
+来使用。
+\subsection{特殊点}
+\subsubsection{相交点}
+\begin{lstlisting}
+\tkzInterLL(A,B)(C,D)
+\end{lstlisting}
+返回直线AB与直线CD的交点。
+\begin{lstlisting}
+\tkzInterLC(A,B)(C,D)
+\end{lstlisting}
+返回直线AB与以C为圆心，经过点D的圆的交点。
+\begin{lstlisting}
+\tkzInterCC(A,B)(C,D)
+\end{lstlisting}
+返回以A为圆心，经过点B的圆和以C为圆心，经过点D的圆的交点。\\
+后两者可以加上选项R或with nodes。
+\subsubsection{中点}
+\begin{lstlisting}
+\tkzDefMidPoint(A,B)
+\end{lstlisting}
+返回线段AB的中点。
+\subsubsection{任意点}
+\begin{lstlisting}
+\tkzDefPointOnline[pos=k](A,B)
+\end{lstlisting}
+以A为原点在线段AB上取一点，使$\bar{AP}=k\bar{AB}$，返回该点。
+\begin{lstlisting}
+\tkzDefPointOnCircle[angle=a,center=O,radius=r]
+\end{lstlisting}
+在以O为圆心，r为半径的圆上取一点P，使P与x轴的夹角为a，返回该点。\\
+当圆是在前一行定义时，不需指定center和radius选项。
+\subsection{特殊直线和圆}
+\subsubsection{特殊直线}
+\begin{lstlisting}
+\tkzDefLine[option](A,B)
+\tkzDefLine[option](A,B,C)
+\end{lstlisting}
+定义与若干个点有关的线段，返回该直线上的点。\\
+option:
+\begin{itemize}
+    \item \textbf{与两个点有关：}
+    \item mediator（默认） - 线段AB的垂直平分线，返回垂直平分线上的两个点
+    \item perpendicular = through P（或orthogonal = through P） - 过点P且垂直于AB的直线，返回该垂线上除P外的一个点
+    \item parallel = through P - 过点P且平行于AB的直线，返回该平行线上除P外的一个点
+    \item \textbf{与三个点有关：}
+    \item bisector [normed/out] - $\angle ABC$的角平分线，normed为内角平分线，out为外角平分线，返回该角平分线上除P外的一个点
+\end{itemize}
+定义完直线后，要用获取生成点的命令获取用于作图的辅助点，然后再用画直线命令来绘制。
+\subsubsection{特殊圆}
+\begin{lstlisting}
+\tkzDefCircle[option](A,B)
+\tkzDefCircle[option](A,B,C)
+\end{lstlisting}
+定义与若干个点有关的圆，返回该圆的圆心和半径。\\
+option:
+\begin{itemize}
+    \item \textbf{与两个点有关：}
+    \item through（默认） - 以A为圆心，B为圆上一点的圆
+    \item diameter - 以AB为直径的圆
+%    \item apollonius - 阿波罗尼圆，须在选项中指定比例K
+%    \item orthogonal through = X and Y - 过X、Y且与以O为圆心、A为半径的圆正交的一个圆
+%    \item orthogonal from = X - 以X为圆心且与以O为圆心、A为半径的圆正交的一个圆
+    \item \textbf{与三个点（$\triangle ABC$）有关：}
+    \item circum - 外接圆
+    \item in - 内切圆
+    \item ex - （在当前字母顺序下）点B所对的旁切圆
+    \item euler - 九点圆，也可写作nine
+%    \item spieker - 斯俾克圆
+\end{itemize}
+定义完圆后，要用获取生成点和线段长度的命令获取用于作图的辅助点和半径，然后再用画圆命令来绘制。
+\subsubsection{圆的切线}
+\begin{lstlisting}
+\tkzDefTangent[option](A,B)
+\tkzDefTangent[option](A,r)
+\end{lstlisting}
+定义以A为圆心、B为其上一点（或r为其半径）的圆的切线。\\
+option:
+\begin{itemize}
+    \item at = P - 过圆上一点P作圆的切线，返回切线上另一点
+    \item from = P - 过圆外一点P作圆的切线（前者），返回两个切点
+    \item from with R = P - 过圆外一点P作圆的切线（后者），返回两个切点
+\end{itemize}
+\subsection{特殊多边形}
+\begin{lstlisting}
+\tkzDefTriangle[option](A,B)
+\end{lstlisting}
+定义以AB为一边的特殊三角形，返回未定义的顶点。\\
+option:
+\begin{itemize}
+    \item two angles = a1 and a2 - 以AB为底边，a1、a2为底角的三角形
+    \item equilateral - 以AB为边的等边三角形
+    \item pythagore - 三边长为3、4、5的直角三角形
+    \item gold - 以AB为底边的黄金三角形
+\end{itemize}
+\begin{lstlisting}
+\tkzDefRegPolygon[option,sides=n,name=P](A,B)
+\end{lstlisting}
+定义以AB为一边的正多边形，返回未定义的顶点。\\
+option:
+\begin{itemize}
+    \item center - 点A为正多边形中心，B为其上一点
+    \item sides - 边数
+    \item name - 各顶点名称前缀，此例中各顶点名称为$P_1$, $P_2$, ..., $P_n$
+\end{itemize}
+\subsection{几何变换}
+\begin{lstlisting}
+\tkzDefPointBy[option](A)
+\end{lstlisting}
+返回A关于某一几何变换后的像。\\
+option:
+\begin{itemize}
+	\item translation = from P to Q - 沿向量PQ平移
+	\item homothety = center O ratio k - 以O为中心、位似比为k的位似变换
+	\item reflection = over P--Q - 关于PQ作对称
+	\item symmetry = center O - 关于O中心对称
+	\item projection = onto P--Q - 在PQ上的射影
+	\item rotation = center O angle a - 关于中心O作旋转角为a的旋转变换
+	\item rotation in rad = center O angle a - 同上
+	\item inversion = center O through P - 作关于以O为圆心、过P的圆的反演
+\end{itemize}
+\end{document}
